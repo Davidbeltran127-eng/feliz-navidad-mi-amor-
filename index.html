@@ -266,7 +266,7 @@
         Toca el botón para empezar la música y abrir tu tarjeta 💗<br>
         (Los celulares requieren un toque para reproducir audio.)
       </p>
-      <button class="btn btn-pink" id="startBtn">Empezar ✨</button>
+      <button class="btn btn-pink" id="startBtn" onclick="startExperience()">Empezar ✨</button>
       <div class="note">
         Nota: la web está lista para reproducir <b>heavy.mp3</b> desde este mismo repo.
       </div>
@@ -337,8 +337,6 @@
 >
   <source src="heavy.mp3" type="audio/mpeg">
 </audio>
-
-
   <script>
     // ========= Nieve (canvas) =========
     const canvas = document.getElementById("snow");
@@ -402,18 +400,23 @@
 
   bgm.volume = 0.85;
 
+  try{
   if(musicOn){
+        const p = bgm.play();
+      // por si iOS devuelve una promesa que falla
+      if (p && typeof p.catch === "function") p.catch(()=>{});
+    }
+  } catch(e){}
+} 
     bgm.play();
   }
 }
-
         // Si el navegador bloquea o no existe el archivo, no hacemos nada.
       }
     }
 
-    startBtn.addEventListener("click", startExperience);
 
-    musicBtn.addEventListener("click", async () => {
+   musicBtn.addEventListener("click", async () => {
       musicOn = !musicOn;
       musicBtn.textContent = musicOn ? "🔊 Música: ON" : "🔇 Música: OFF";
       try{
