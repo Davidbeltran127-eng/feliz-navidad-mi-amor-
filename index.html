@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feliz Navidad, Joahnyelees 🎄💗</title>
+
+  <style>
+    :root{
+      --pink1:#ffd6e7;
+      --pink2:#ff9fc5;
+      --pink3:#ff5fa2;
+      --white:#ffffff;
+      --glass: rgba(255,255,255,.55);
+      --shadow: rgba(0,0,0,.18);
+      --text:#3a0f22;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      overflow-x:hidden;
+
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(255,255,255,.85) 0%, transparent 60%),
+        radial-gradient(900px 700px at 85% 15%, rgba(255,210,230,.9) 0%, transparent 55%),
+        linear-gradient(135deg, var(--pink1), #fff 45%, var(--pink2));
+    }
+
+    /* Nieve (canvas) */
+    canvas#snow{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    /* Fondo suave con brillo */
+    .glow{
+      position:fixed;
+      inset:-120px;
+      z-index:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,95,162,.22), transparent 45%),
+        radial-gradient(circle at 80% 30%, rgba(255,159,197,.25), transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(255,255,255,.35), transparent 55%);
+      filter: blur(8px);
+      animation: float 8s ease-in-out infinite alternate;
+    }
+    @keyframes float { from{ transform:translateY(0);} to{ transform:translateY(14px);} }
+
+    /* Layout */
+    .wrap{
+      position:relative;
+      z-index:2;
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 26px 16px 40px;
+    }
+
+    .card{
+      width:min(720px, 100%);
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 28px;
+      box-shadow: 0 20px 70px var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+      transform: translateY(10px);
+      opacity:0;
+      animation: pop 900ms ease forwards;
+    }
+    @keyframes pop{
+      to{ transform: translateY(0); opacity:1; }
+    }
+
+    .topbar{
+      padding: 22px 22px 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.0));
+      border-bottom: 1px solid rgba(255,255,255,.6);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(255,95,162,.18);
+      box-shadow: 0 8px 18px rgba(255,95,162,.12);
+      font-weight: 800;
+      letter-spacing:.2px;
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border:0;
+      cursor:pointer;
+      border-radius:999px;
+      padding: 10px 14px;
+      font-weight:800;
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.02); }
+    .btn:active{ transform: translateY(0px); }
+
+    .btn-pink{
+      background: linear-gradient(135deg, var(--pink3), #ff7db5);
+      color: white;
+    }
+    .btn-white{
+      background: rgba(255,255,255,.8);
+      color: #7a1638;
+      border: 1px solid rgba(255,95,162,.2);
+    }
+
+    .content{
+      padding: 26px 22px 22px;
+    }
+
+    h1{
+      margin: 8px 0 8px;
+      font-size: clamp(32px, 4.2vw, 52px);
+      line-height:1.05;
+      letter-spacing: -0.6px;
+      color:#5b0f2b;
+    }
+
+    .sub{
+      margin: 0 0 16px;
+      font-size: clamp(15px, 2.1vw, 18px);
+      line-height:1.6;
+      opacity:.95;
+    }
+
+    .divider{
+      height:1px;
+      background: rgba(255,95,162,.18);
+      margin: 18px 0;
+    }
+
+    .letter{
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(255,95,162,.14);
+      border-radius: 22px;
+      padding: 18px 16px;
+      box-shadow: 0 14px 30px rgba(255,95,162,.12);
+      transform: translateY(6px);
+      opacity:0;
+      animation: fadeUp 900ms ease forwards;
+      animation-delay: 250ms;
+    }
+    @keyframes fadeUp{ to{ transform:translateY(0); opacity:1; } }
+
+    .letter p{
+      margin: 0 0 12px;
+      line-height:1.75;
+      font-size: 16.2px;
+    }
+
+    .signature{
+      margin-top: 10px;
+      font-weight: 900;
+      color:#5b0f2b;
+    }
+
+    .reveal{
+      margin-top: 16px;
+      display:grid;
+      gap: 10px;
+    }
+
+    .final{
+      display:none;
+      margin-top: 10px;
+      padding: 16px 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255,95,162,.18), rgba(255,255,255,.7));
+      border: 1px solid rgba(255,95,162,.20);
+      box-shadow: 0 14px 34px rgba(0,0,0,.10);
+      animation: fadeUp .7s ease forwards;
+    }
+    .final strong{
+      font-size: 18px;
+      color:#5b0f2b;
+    }
+
+    .note{
+      margin: 12px 0 0;
+      font-size: 13px;
+      opacity:.85;
+      line-height:1.45;
+    }
+
+    /* Overlay para iniciar música (necesario en móviles) */
+    .overlay{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      background: rgba(255, 214, 231, .55);
+      backdrop-filter: blur(10px);
+      z-index:5;
+    }
+    .overlay-card{
+      width:min(520px, 100%);
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(255,95,162,.18);
+      border-radius: 24px;
+      padding: 18px 16px;
+      text-align:center;
+      box-shadow: 0 18px 60px rgba(0,0,0,.18);
+    }
+    .overlay h2{
+      margin: 0 0 8px;
+      color:#5b0f2b;
+      letter-spacing:-.2px;
+    }
+    .overlay p{
+      margin: 0 0 14px;
+      line-height:1.5;
+      opacity:.95;
+    }
+
+    footer{
+      padding: 0 22px 22px;
+      opacity:.75;
+      font-size: 12.5px;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glow"></div>
+  <canvas id="snow"></canvas>
+
+  <!-- Overlay para que la música pueda empezar con un tap -->
+  <div class="overlay" id="overlay">
+    <div class="overlay-card">
+      <h2>🎶 Un detalle con música</h2>
+      <p>
+        Toca el botón para empezar la música y abrir tu tarjeta 💗<br>
+        (Los celulares requieren un toque para reproducir audio.)
+      </p>
+      <button class="btn btn-pink" id="startBtn">Empezar ✨</button>
+      <div class="note">
+        Nota: la web está lista para reproducir <b>heavy.mp3</b> desde este mismo repo.
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <article class="card" role="main" aria-label="Tarjeta de Navidad">
+      <header class="topbar">
+        <div class="badge">🎄💗 Navidad en rosa</div>
+        <div class="controls">
+          <button class="btn btn-white" id="musicBtn">🔊 Música: ON</button>
+          <button class="btn btn-pink" id="revealBtn">Abrir el final 💌</button>
+        </div>
+      </header>
+
+      <section class="content">
+        <h1>Feliz Navidad, Joahnyelees 🎄💗</h1>
+        <p class="sub">
+          Hoy quería regalarte algo diferente: una tarjetita hecha con cariño, en tu vibe,
+          en rosa y con Navidad… porque tú haces que todo se sienta más bonito.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="letter" aria-label="Mensaje">
+          <p>
+            Mi amor, feliz Navidad. Gracias por ser refugio, por tu dulzura y por la forma
+            en la que haces que cualquier día se sienta especial.
+          </p>
+          <p>
+            Eres de esas personas que no solo se quieren, se cuidan. Y yo te elijo:
+            en lo simple, en lo bonito, en lo real… y también en lo eterno.
+          </p>
+          <p>
+            Que esta Navidad te abrace suave, que te traiga paz, y que te recuerde
+            lo valiosa y amada que eres.
+          </p>
+
+          <div class="signature">— David 💗</div>
+
+          <div class="reveal">
+            <div class="final" id="finalBox">
+              <strong>Ahora… sal afuera.</strong>
+              <div style="margin-top:8px; line-height:1.65;">
+                Porque voy a estar afuera de tu casa con el regalo 🎁✨
+              </div>
+            </div>
+            <div class="note">
+              Si no ves el “final”, toca el botón <b>“Abrir el final 💌”</b> arriba.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        Hecho con amor en modo Navidad + rosa 💗🎄
+      </footer>
+    </article>
+  </div>
+
+  <!-- Audio: sube un archivo llamado heavy.mp3 al repo (misma carpeta que index.html) -->
+  <audio id="bgm" preload="auto" loop>
+    <source src="heavy.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // ========= Nieve (canvas) =========
+    const canvas = document.getElementById("snow");
+    const ctx = canvas.getContext("2d");
+    let w, h, flakes;
+
+    function resize(){
+      w = canvas.width = window.innerWidth * devicePixelRatio;
+      h = canvas.height = window.innerHeight * devicePixelRatio;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      initFlakes();
+    }
+
+    function initFlakes(){
+      const count = Math.min(140, Math.floor(window.innerWidth / 6));
+      flakes = Array.from({length: count}, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: (Math.random() * 2.2 + 0.8) * devicePixelRatio,
+        s: (Math.random() * 0.9 + 0.4) * devicePixelRatio,
+        drift: (Math.random() * 0.8 - 0.4) * devicePixelRatio,
+        a: Math.random() * 0.5 + 0.25
+      }));
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      for(const f of flakes){
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255,255,255,${f.a})`;
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
+        ctx.fill();
+
+        f.y += f.s;
+        f.x += f.drift;
+
+        if(f.y > h + 10) { f.y = -10; f.x = Math.random()*w; }
+        if(f.x > w + 10) f.x = -10;
+        if(f.x < -10) f.x = w + 10;
+      }
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+    draw();
+
+    // ========= Interacciones =========
+    const overlay = document.getElementById("overlay");
+    const startBtn = document.getElementById("startBtn");
+    const bgm = document.getElementById("bgm");
+    const musicBtn = document.getElementById("musicBtn");
+    const revealBtn = document.getElementById("revealBtn");
+    const finalBox = document.getElementById("finalBox");
+
+    let musicOn = true;
+
+    async function startExperience(){
+      overlay.style.display = "none";
+
+      // Intentar reproducir la canción si existe el archivo heavy.mp3
+      // (si no existe, no rompe la web; solo no suena)
+      try {
+        bgm.volume = 0.85;
+        if(musicOn) await bgm.play();
+      } catch(e){
+        // Si el navegador bloquea o no existe el archivo, no hacemos nada.
+      }
+    }
+
+    startBtn.addEventListener("click", startExperience);
+
+    musicBtn.addEventListener("click", async () => {
+      musicOn = !musicOn;
+      musicBtn.textContent = musicOn ? "🔊 Música: ON" : "🔇 Música: OFF";
+      try{
+        if(musicOn) await bgm.play();
+        else bgm.pause();
+      } catch(e){}
+    });
+
+    revealBtn.addEventListener("click", () => {
+      finalBox.style.display = "block";
+      finalBox.scrollIntoView({behavior:"smooth", block:"center"});
+    });
+  </script>
+</body>
+</html>
