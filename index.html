@@ -328,9 +328,16 @@
   </div>
 
   <!-- Audio: sube un archivo llamado heavy.mp3 al repo (misma carpeta que index.html) -->
-  <audio id="bgm" preload="auto" loop>
-    <source src="heavy.mp3" type="audio/mpeg">
-  </audio>
+<audio
+  id="bgm"
+  preload="auto"
+  loop
+  playsinline
+  webkit-playsinline
+>
+  <source src="heavy.mp3" type="audio/mpeg">
+</audio>
+
 
   <script>
     // ========= Nieve (canvas) =========
@@ -390,15 +397,16 @@
 
     let musicOn = true;
 
-    async function startExperience(){
-      overlay.style.display = "none";
+  function startExperience(){
+  overlay.style.display = "none";
 
-      // Intentar reproducir la canción si existe el archivo heavy.mp3
-      // (si no existe, no rompe la web; solo no suena)
-      try {
-        bgm.volume = 0.85;
-        if(musicOn) await bgm.play();
-      } catch(e){
+  bgm.volume = 0.85;
+
+  if(musicOn){
+    bgm.play();
+  }
+}
+
         // Si el navegador bloquea o no existe el archivo, no hacemos nada.
       }
     }
